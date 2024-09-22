@@ -36,7 +36,12 @@
   <body class="g-sidenav-show  bg-gray-100">
 
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
-@include('layout.pegawai.sidebar')
+@if (Auth::user()->role == 0)
+  @include('layout.admin.sidebar')
+@elseif (Auth::user()->role == 1)
+  @include('layout.pegawai.sidebar')
+  
+@endif
   
 </aside>
 

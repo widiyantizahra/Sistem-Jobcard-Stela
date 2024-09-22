@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AutoLogout;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +15,15 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 //auto Logout
 Route::middleware([AutoLogout::class])->group(function () {
 
-    // Admin routes group with middleware and prefix
+    // Admin 
     Route::group(['prefix' => 'admin', 'middleware' => ['admin'], 'as' => 'admin.'], function () {
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard'); 
 
-        // Manage Employees
-        Route::prefix('managepegawai.kelolapegawai')->group(function () {
-            
+        // Profile
+        Route::prefix('profile')->group(function () {
+            Route::get('/edit/{id}',[ProfileController::class,'index'])->name('edit');
+            Route::put('/update/{id}',[ProfileController::class,'update'])->name('update');
         });
     });
     Route::group(['prefix' => 'pegawai', 'middleware' => ['pegawai'], 'as' => 'pegawai.'], function () {

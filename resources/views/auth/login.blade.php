@@ -33,7 +33,17 @@
                 <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
                   <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Sign in</h4>
                   <div class="row mt-3">
-                    <div class="col-2 text-center ms-auto">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                    </div>
+                    <div class="col-2">
+
+                      <img class="position-center"  src="{{asset('PT. Bersama Sahabat Makmur Logo.png')}}" width="300%" alt="Logo PT. BSM">
+                    </div>
+                    <div class="col-2">
+                    </div>
+                    <div class="col-2"></div>
+                    {{-- <div class="col-2 text-center ms-auto">
                       <a class="btn btn-link px-3" href="javascript:;">
                         <i class="fa fa-facebook text-white text-lg"></i>
                       </a>
@@ -47,7 +57,7 @@
                       <a class="btn btn-link px-3" href="javascript:;">
                         <i class="fa fa-google text-white text-lg"></i>
                       </a>
-                    </div>
+                    </div> --}}
                   </div>
                 </div>
               </div>
