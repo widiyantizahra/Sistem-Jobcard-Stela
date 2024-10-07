@@ -13,7 +13,11 @@
     <ul class="navbar-nav">   
 
 <li class="nav-item">
-<a class="nav-link text-white " href="{{asset('vendor')}}/pages/dashboard.html">
+    @if (Auth::user()->role == 0)
+    <a class="nav-link text-white " href="{{route('admin.dashboard')}}">
+    @else
+    <a class="nav-link text-white " href="{{route('pegawai.dashboard')}}">
+    @endif
     
     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">dashboard</i>
@@ -23,19 +27,33 @@
 </a>
 </li>
 
+{{-- <li class="nav-item">
+    @if (Auth::user()->role == 0)
+    <a class="nav-link text-white " href="{{route('admin.dashboard')}}">
+    @else
+    <a class="nav-link text-white " href="{{route('pegawai.dashboard')}}">
+    @endif
+    
+    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+        <i class="material-icons opacity-10">JobCard</i>
+    </div>
+    
+    <span class="nav-link-text ms-1">JobCard</span>
+</a>
+</li> --}}
+
 
 <li class="nav-item">
-<a class="nav-link text-white " href="{{asset('vendor')}}/pages/tables.html">
+<a class="nav-link text-white " href="">
     
     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
         <i class="material-icons opacity-10">table_view</i>
     </div>
     
-    <span class="nav-link-text ms-1">Tables</span>
+    <span class="nav-link-text ms-1">Job Card</span>
 </a>
 </li>
-
-
+{{--
 <li class="nav-item">
 <a class="nav-link text-white " href="{{asset('vendor')}}/pages/billing.html">
     
@@ -121,14 +139,8 @@
     
     <span class="nav-link-text ms-1">Sign Up</span>
 </a>
-</li>
+</li> --}}
 
     </ul>
 </div>
 
-<div class="sidenav-footer position-absolute w-100 bottom-0 ">
-<div class="mx-3">
-<a class="btn bg-gradient-primary w-100" href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree" type="button">Upgrade to pro</a>
-</div>
-
-</div>

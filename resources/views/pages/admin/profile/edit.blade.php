@@ -50,7 +50,7 @@ Edit Profile
             
         </div>
         <h6 class="mb-0">Profile Information</h6>
-        <form action="{{ route('admin.update', $user->id) }}" method="POST">
+        <form action="{{ route('update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
             @if (session('success'))

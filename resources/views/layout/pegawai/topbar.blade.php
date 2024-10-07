@@ -5,7 +5,7 @@
         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">@yield('pages')</li>
       </ol>
-      <h6 class="font-weight-bolder mb-0">@yield('pages')</h6>
+      <h6 class="font-weight-bolder mt-2 mb-0">@yield('pages')</h6>
       
     </nav>
     <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
@@ -19,10 +19,15 @@
       </div>
       @php
         $user_id = Auth::user()->id;
+        $role = Auth::user()->role;
       @endphp
       <ul class="navbar-nav  justify-content-end">
         <li class="nav-item d-flex align-items-center">
-          <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="{{route('admin.edit',$user_id)}}">{{Auth::user()->name}}</a>
+          @if ($role == 0)
+          <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="{{route('edit',$user_id)}}">{{Auth::user()->name}}</a>
+          @else
+          <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="{{route('edit',$user_id)}}">{{Auth::user()->name}}</a>
+          @endif
         </li>
         {{-- <li class="mt-2">
           <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>

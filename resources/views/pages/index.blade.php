@@ -2,6 +2,9 @@
 @section('title')
     Dashboard || cc
 @endsection
+@section('pages')
+Dashboard
+@endsection
 @section('content')
 <div class="container-fluid py-4">
   <div class="row">
