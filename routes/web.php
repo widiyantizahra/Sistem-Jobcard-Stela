@@ -32,8 +32,10 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/add', [JobCardController::class, 'add'])->name('jobcard.add');
             Route::post('/store', [JobCardController::class, 'store'])->name('jobcard.store');
             Route::get('/edit/{id}', [JobCardController::class, 'edit'])->name('jobcard.edit');
+            Route::get('/show/{id}', [JobCardController::class, 'show'])->name('jobcard.show');
             Route::put('/update', [JobCardController::class, 'update'])->name('jobcard.update');
             Route::get('/print', [JobCardController::class, 'print'])->name('jobcard.print');
+            Route::delete('/delete', [JobCardController::class, 'destroy'])->name('jobcard.destroy');
         });
         
 

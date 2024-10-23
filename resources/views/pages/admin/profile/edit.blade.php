@@ -34,7 +34,7 @@ Edit Profile
           <div class="row gx-4 mb-2">
             <div class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img src="{{asset('vendor')}}/assets/img/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                <img src="{{asset('storage/'.$user->profile)}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
               </div>
             </div>
             <div class="col-auto my-auto">
@@ -50,7 +50,7 @@ Edit Profile
             
         </div>
         <h6 class="mb-0">Profile Information</h6>
-        <form action="{{ route('update', $user->id) }}" method="POST">
+        <form action="{{ route('update', $user->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             @if (session('success'))
@@ -66,7 +66,22 @@ Edit Profile
                         <div class="card card-plain h-100">
                             <div class="card-body p-3">
                                 <hr class="horizontal gray-light my-4">
+                                <div class="col-auto">
+                                    
+                                </div>
                                 <ul class="list-group">
+                                    <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                                        <strong for="avatar" class="text-dark"">Update Profile Picture</strong>
+                                        <input type="file" name="avatar" class="form-control" id="avatar" accept="image/*">
+                                        @error('avatar')
+                                        <div class="text-danger text-sm">{{ $message }}</div>
+                                        @enderror
+                                    </li>
+                                    <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                                        <strong class="text-dark">Username:</strong> 
+                                        &nbsp;
+                                        <input type="text" name="username" class="form-control" value="{{ $user->username }}">
+                                    </li>
                                     <li class="list-group-item border-0 ps-0 pt-0 text-sm">
                                         <strong class="text-dark">Username:</strong> 
                                         &nbsp;
