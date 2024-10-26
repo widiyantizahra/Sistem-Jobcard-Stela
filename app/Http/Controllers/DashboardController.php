@@ -8,7 +8,7 @@ class DashboardController extends Controller
 {
     public function pegawai()
     {
-        return view('pages.index');
+        return view('pages.pegawai.index');
     }
     public function admin()
     {

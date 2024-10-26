@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JobCardController;
+use App\Http\Controllers\KelolaMaterialController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AutoLogout;
@@ -45,7 +46,9 @@ Route::middleware([AutoLogout::class])->group(function () {
     Route::group(['prefix' => 'pegawai', 'middleware' => ['pegawai'], 'as' => 'pegawai.'], function () {
         // Dashboard
         Route::get('/', [DashboardController::class, 'pegawai'])->name('dashboard'); 
-        
+        Route::prefix('kmaterial')->group(function () {
+            Route::get('/',[KelolaMaterialController::class,'index'])->name('kmaterial');
+        });
     });
     
 });
