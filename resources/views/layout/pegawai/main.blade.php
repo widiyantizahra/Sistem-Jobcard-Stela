@@ -25,6 +25,8 @@
 
 <!-- Material Icons -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <!-- CSS Files -->
 
@@ -54,7 +56,33 @@
 
 <!-- End Navbar -->
             <div class="container-fluid py-4">
-                
+              <script>
+                var win = navigator.platform.indexOf('Win') > -1;
+                if (win && document.querySelector('#sidenav-scrollbar')) {
+                  var options = {
+                    damping: '0.5'
+                  }
+                  Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+                }
+            
+                document.addEventListener('DOMContentLoaded', function () {
+                  @if (session('success'))
+                    Swal.fire({
+                      title: '{{ session('success') }}',
+                      icon: 'success',
+                      confirmButtonColor: '#007bff', // Set button color to blue
+                    });
+                  @endif
+            
+                  @if (session('failed'))
+                    Swal.fire({
+                      title: '{{ session('failed') }}',
+                      icon: 'error',
+                      confirmButtonColor: '#007bff', // Set button color to blue
+                    });
+                  @endif
+                });
+              </script>
 @yield('content')
 
 <footer class="footer py-4  ">

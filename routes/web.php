@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JobCardController;
+use App\Http\Controllers\JobcardDetailController;
 use App\Http\Controllers\KelolaMaterialController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
@@ -37,6 +38,10 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::put('/update', [JobCardController::class, 'update'])->name('jobcard.update');
             Route::get('/print', [JobCardController::class, 'print'])->name('jobcard.print');
             Route::delete('/delete', [JobCardController::class, 'destroy'])->name('jobcard.destroy');
+            Route::prefix('detail')->group(function () {
+                Route::post('/store/{id}', [JobcardDetailController::class, 'store'])->name('jobcard.detail.store');
+            });
+
         });
         
 

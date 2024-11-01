@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('jobcard_detail', function (Blueprint $table) {
             $table->id();
             $table->integer('qty');
+            $table->string('description');
             $table->integer('unit_bop');
             $table->integer('total_bop');
             $table->integer('unit_sp');
             $table->integer('total_sp');
-            
             $table->integer('unit_bp');
             $table->integer('total_bp');
+            $table->string('supplier');
             $table->string('remarks')->nullable();
-            
             $table->timestamps();
         });
     }

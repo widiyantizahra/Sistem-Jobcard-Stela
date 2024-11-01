@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JobCard; // Ensure you have this model for Job Card
 use App\Models\JobCardM;
+use App\Models\Material;
 use Illuminate\Support\Facades\Validator;
 
 class JobCardController extends Controller
@@ -23,7 +24,9 @@ class JobCardController extends Controller
         // Fetch orders (for Orders Overview)
         $orders = []; // Adjust this logic to fetch orders if applicable
 
-        return view('pages.admin.job_card.index',compact('jobCards','orders'));
+        $material = Material::all();
+
+        return view('pages.admin.job_card.index',compact('jobCards','orders','material'));
 
     }
 
@@ -38,16 +41,16 @@ class JobCardController extends Controller
     {
         // Validation
         $validator = Validator::make($request->all(), [
-            'no_jobcard' => 'required|string|max:255',
+            'no_jobcard' => 'required|string|max:255|unique:jobcard',
             'date' => 'required|date',
             'kurs' => 'required|numeric',
             'customer_name' => 'required|string|max:255',
             'no_po' => 'required|string|max:255',
             'po_date' => 'required|date',
             'po_received' => 'required|date',
-            'totalbop' => 'required|numeric',
-            'totalsp' => 'required|numeric',
-            'totalbp' => 'required|numeric',
+            // 'totalbop' => 'required|numeric',
+            // 'totalsp' => 'required|numeric',
+            // 'totalbp' => 'required|numeric',
             'no_form' => 'required|string|max:255',
             'effective_date' => 'required|date',
             'no_revisi' => 'required|integer',
