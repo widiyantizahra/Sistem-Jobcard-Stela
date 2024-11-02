@@ -54,6 +54,7 @@ class JobcardDetailController extends Controller
     }
     
     public function addPengadaan($id){
-        
+        // dd($id);
+        return redirect()->back()->with('success','Pengadaan telah Diajukan');
     }
 }

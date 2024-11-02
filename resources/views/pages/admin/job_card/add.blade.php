@@ -147,7 +147,7 @@
             if (qty > maxQty) {
                 Swal.fire({
                     title: 'Stock Unavailable',
-                    text: 'Please reduce the quantity. Stock is insufficient.',
+                    text: 'Please reduce the quantity. Stock is insufficient.max stok : '. maxQty,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Procure Material',

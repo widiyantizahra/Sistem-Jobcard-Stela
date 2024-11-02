@@ -58,6 +58,9 @@ Route::middleware([AutoLogout::class])->group(function () {
         Route::get('/', [DashboardController::class, 'pegawai'])->name('dashboard'); 
         Route::prefix('kmaterial')->group(function () {
             Route::get('/',[KelolaMaterialController::class,'index'])->name('kmaterial');
+            Route::post('/store',[KelolaMaterialController::class,'store'])->name('kmaterial.store');
+            Route::put('/update/{id}',[KelolaMaterialController::class,'update'])->name('kmaterial.update');
+            Route::delete('/destroy/{id}',[KelolaMaterialController::class,'destroy'])->name('kmaterial.destroy');
         });
     });
     

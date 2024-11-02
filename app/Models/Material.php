@@ -15,6 +15,7 @@ class Material extends Model
         'name',
         'stok',
         'unit_price',
+        'buying_price',
         'supplier',
     ];
 }
