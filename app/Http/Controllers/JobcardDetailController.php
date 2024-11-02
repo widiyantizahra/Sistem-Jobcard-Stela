@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobCardDetailM;
+use App\Models\Material;
 use Illuminate\Http\Request;
 
 class JobcardDetailController extends Controller
 {
-    public function store(Request $request, $id)
+    public function add($id){
+        $material = Material::all();
+        return view('pages.admin.job_card.add',compact('material','id'));
+    }
+    public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
 
         // Validate incoming request data
         $validatedData = $request->validate([
@@ -26,7 +31,7 @@ class JobcardDetailController extends Controller
         ]);
         // Store the data in the database (assuming you have a JobCardDetail model)
         $jobcard = new JobCardDetailM();
-        $jobcard->jobcard_id = $id;
+        $jobcard->jobcard_id = $request->job_card_id;
         $jobcard->qty = $request->qty;
         $jobcard->description = $request->description;
         $jobcard->unit_bop = $request->unit_bop;
@@ -38,9 +43,17 @@ class JobcardDetailController extends Controller
         $jobcard->supplier = $request->supplier;
         $jobcard->remarks = $request->remarks;
         $jobcard->save();
+
+        $material = Material::find($request->id);
+        $material->stok = $material->stok - $request->qty;
+        // dd($material->stok);
+        $material->save();
     
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Job card detail added successfully!');
+        return redirect()->route('admin.jobcard')->with('success', 'Job card detail added successfully!');
     }
     
+    public function addPengadaan($id){
+        
+    }
 }
