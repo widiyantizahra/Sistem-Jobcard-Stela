@@ -89,9 +89,70 @@ Job Card
                           <a href="{{ route('admin.jobcard.edit', $jobCard->id) }}" class="mx-2">
                               <i class="material-icons text-warning">edit</i>
                           </a>
-                          <a href="{{ route('admin.jobcard.show', $jobCard->id) }}" class="mx-2">
-                              <i class="material-icons text-success">visibility</i>
+                          <!-- View Icon Trigger for Modal -->
+                          <a href="#" class="mx-2" data-bs-toggle="modal" data-bs-target="#viewModal{{ $jobCard->id }}">
+                            <i class="material-icons text-success">visibility</i>
                           </a>
+
+                          <!-- View Job Card Modal -->
+                          <div class="ml-4 modal fade" id="viewModal{{ $jobCard->id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ $jobCard->id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <!-- Modal Header with Title -->
+                                    <div class="modal-header bg-primary text-white">
+                                      @php
+                                        $job = \App\Models\JobCardM::find($jobCard->id);
+                                      @endphp
+                                        <h5 class="modal-title" id="viewModalLabel{{ $jobCard->id }}">Job Card Details - {{ $job->no_jobcard }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    
+                                    <!-- Modal Body with Professional Layout -->
+                                    <div class="modal-body">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <!-- Job Card Summary Section -->
+                                                <h6 class="text-muted mb-3">Summary</h6>
+                                                <div class="row mb-4">
+                                                    <div class="col-md-6">
+                                                        <p><strong>Description:</strong> {{ $jobCard->description }}</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong>Stock:</strong> {{ $jobCard->stok }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Pricing Section -->
+                                                <h6 class="text-muted mb-3">Pricing</h6>
+                                                <div class="row mb-4">
+                                                    <div class="col-md-6">
+                                                        <p><strong>Unit Price:</strong> ${{ number_format($jobCard->unit_price, 2) }}</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong>Buying Price:</strong> ${{ number_format($jobCard->buying_price, 2) }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Supplier Information Section -->
+                                                <h6 class="text-muted mb-3">Supplier Information</h6>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <p><strong>Supplier:</strong> {{ $jobCard->supplier }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal Footer with Close Button -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+
+
                           <form  action="{{ route('admin.jobcard.destroy', $jobCard->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="mx-2">
                               @csrf
                               @method('DELETE')
