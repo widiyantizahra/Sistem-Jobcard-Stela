@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JobCard; // Ensure you have this model for Job Card
+use App\Models\JobCardDetailM;
 use App\Models\JobCardM;
 use App\Models\Material;
 use Illuminate\Support\Facades\Validator;
@@ -143,7 +144,14 @@ class JobCardController extends Controller
     // Delete a job card
     public function destroy($id)
     {
+        // dd($id);
         $jobCard = JobCardM::findOrFail($id);
+        $loop = JobCardDetailM::where('jobcard_id',$id)->get();
+        foreach($loop as $l){
+            $same = JobCardDetailM::where('jobcard_id',$l->jobcard_id)->value('id');
+            $materi = JobCardDetailM::findOrFail($same);
+            $materi->delete();
+        }
         $jobCard->delete();
 
         return redirect()->route('admin.jobcard')->with('success', 'Job Card deleted successfully!');

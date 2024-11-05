@@ -103,7 +103,8 @@ Job Card
                                       @php
                                         $job = \App\Models\JobCardM::find($jobCard->id);
                                       @endphp
-                                        <h5 class="modal-title" id="viewModalLabel{{ $jobCard->id }}">Job Card Details - {{ $job->no_jobcard }}</h5>
+                                        <h5 class="modal-title" id="viewModalLabel{{ $jobCard->id }}" style="color: white">Job Card Details - {{ $job->no_jobcard }}</h5> &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a href="" class="mt-2 btn btn-white"><i class="ml-3 material-icons text-black">print</i></a>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     
@@ -112,32 +113,98 @@ Job Card
                                         <div class="card">
                                             <div class="card-body">
                                                 <!-- Job Card Summary Section -->
-                                                <h6 class="text-muted mb-3">Summary</h6>
+                                                <h6 class="text-muted mb-3"><center>Job Card</center></h6>
                                                 <div class="row mb-4">
                                                     <div class="col-md-6">
-                                                        <p><strong>Description:</strong> {{ $jobCard->description }}</p>
+                                                        <strong>JC No : </strong> {{ $job->no_jobcard }} <br>
+                                                        <strong>Date : </strong> {{ $job->date }} <br>
+                                                        <strong>kurs : </strong> {{ $job->kurs }} <br>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <p><strong>Stock:</strong> {{ $jobCard->stok }}</p>
+                                                    <div class="col-md-6 text-end">
+                                                        <strong>Customer Name : </strong> {{ $job->customer_name }} <br>
+                                                        <strong>PO No : </strong> {{ $job->customer_name }} <br>
+                                                        <strong>PO Date : </strong> {{ $job->po_date }} <br>
+                                                        <strong>PO Received : </strong> {{ $job->po_received }} <br>
                                                     </div>
                                                 </div>
 
                                                 <!-- Pricing Section -->
-                                                <h6 class="text-muted mb-3">Pricing</h6>
-                                                <div class="row mb-4">
-                                                    <div class="col-md-6">
-                                                        <p><strong>Unit Price:</strong> ${{ number_format($jobCard->unit_price, 2) }}</p>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p><strong>Buying Price:</strong> ${{ number_format($jobCard->buying_price, 2) }}</p>
-                                                    </div>
-                                                </div>
+                                                <h6 class="text-muted mb-3">Detail</h6>
+                                                <div class="table-responsive">
+                                                  <table class="table table-striped">
+                                                      <thead>
+                                                          <tr>
+                                                              <th rowspan="2">NO</th>
+                                                              <th rowspan="2">Qty</th>
+                                                              <th rowspan="2">Description</th>
+                                                              <th colspan="2">Bottom Price</th>
+                                                              <th colspan="2">Selling Price</th>
+                                                              <th colspan="3">Buying Price</th>
+                                                              <th rowspan="2">Remarks <br> Delivery Time</th>
+                                                          </tr>
+                                                          <tr>
+                                                              <th>Unit Price</th>
+                                                              <th>Total</th>
+                                                              <th>Unit Price</th>
+                                                              <th>Total</th>
+                                                              <th>Unit Price</th>
+                                                              <th>Total</th>
+                                                              <th>Supplier</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        @php
+                                                          $data = \App\Models\JobCardDetailM::where('jobcard_id',$job->id)->get();
+                                                          // dd($job->id);
+                                                        @endphp
+                                                        @foreach ($data as $d)
+                                                          
+                                                        
+                                                          <tr>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$loop->iteration}}</td> <!-- NO -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$d->qty}}</td> <!-- Qty -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$d->description}}</td> <!-- Description -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->unit_bop}}</td> <!-- Bottom Price Unit Price -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->total_bop}}</td> <!-- Bottom Price Total -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->unit_sp}}</td> <!-- Selling Price Unit Price -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->total_sp}}</td> <!-- Selling Price Total -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->unit_bp}}</td> <!-- Buying Price Unit Price -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;Rp. {{$d->total_bp}}</td> <!-- Buying Price Total -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$d->supplier}}</td> <!-- Buying Price Supplier -->
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$d->remarks}}</td> <!-- Remarks/Delivery Time -->
+                                                          </tr>
+                                                        @endforeach
+                                                            <tr>
+                                                              <td colspan="3" class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;Total In Rupiah</td>
+                                                              <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;Rp</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalbop}}</td>
+                                                              <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;Rp</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalsp}}</td>
+                                                              <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;Rp</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalbp}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <td colspan="3" class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;Total In USD</td>
+                                                              <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;$</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalbop}}</td>
+                                                              <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;$</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalsp}}</td>
+                                                              <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;$</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalbp}}</td>
+                                                            </tr>
+                                                            
+                                                          <!-- Additional rows as needed -->
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                              
 
                                                 <!-- Supplier Information Section -->
-                                                <h6 class="text-muted mb-3">Supplier Information</h6>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <p><strong>Supplier:</strong> {{ $jobCard->supplier }}</p>
+                                                <div class="row mt-2">
+                                                    <div class="col-md-12 text-end">
+                                                        <strong>No Form:</strong> {{ $job->no_form }} <br>
+                                                        <strong>Effective Date:</strong> {{ $job->effective_date }} <br>
+                                                        <strong>No Revisi:</strong> {{ $job->no_revisi }} <br>
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,14 +219,34 @@ Job Card
                             </div>
                           </div>
 
+                                  
+                            <!-- Delete Button with Modal Trigger -->
+                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal{{$jobCard->id}}">
+                              <i class="material-icons text-danger">delete</i>
+                            </a>
 
-                          <form  action="{{ route('admin.jobcard.destroy', $jobCard->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="mx-2">
-                              @csrf
-                              @method('DELETE')
-                              <button type="submit" class="btn btn-link p-0" style="border: none; background: none;">
-                                  <i class="material-icons text-danger">delete</i>
-                              </button>
-                          </form>
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal{{$jobCard->id}}" tabindex="-1" aria-labelledby="deleteModalLabel{{$jobCard->id}}" aria-hidden="true">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="deleteModalLabel{{$jobCard->id}}">Confirm Delete</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                          Are you sure you want to delete this job card?
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                          <form action="{{ route('admin.jobcard.destroy', $jobCard->id) }}" method="POST">
+                                              @csrf
+                                              @method('DELETE')
+                                              <button type="submit" class="btn btn-danger">Delete</button>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
                       </div>
                       
                       </td>

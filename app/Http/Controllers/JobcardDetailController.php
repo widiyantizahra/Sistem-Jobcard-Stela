@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobCardDetailM;
+use App\Models\JobCardM;
 use App\Models\Material;
 use Illuminate\Http\Request;
 
@@ -48,6 +49,12 @@ class JobcardDetailController extends Controller
         $material->stok = $material->stok - $request->qty;
         // dd($material->stok);
         $material->save();
+
+        $jc = JobCardM::find($request->job_card_id);
+        $jc->totalbop = $jc->totalbop + $request->total_bop;
+        $jc->totalsp = $jc->totalsp + $request->total_sp;
+        $jc->totalbp = $jc->totalbp + $request->total_bp;
+        $jc->save();
     
         // Redirect back with a success message
         return redirect()->route('admin.jobcard')->with('success', 'Job card detail added successfully!');
