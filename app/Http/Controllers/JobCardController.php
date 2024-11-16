@@ -22,12 +22,25 @@ class JobCardController extends Controller
                          ->orWhere('customer_name', 'like', "%{$search}%");
         })->paginate(10); // Modify pagination as needed
 
-        // Fetch orders (for Orders Overview)
-        $orders = []; // Adjust this logic to fetch orders if applicable
-
+        $orders = []; 
+        $datePrefix = 'JC.' . now()->format('dmY'); 
+        $lastJobCard = JobCardM::where('no_jobcard', 'like', "$datePrefix%")
+            ->orderBy('no_jobcard', 'desc')
+            ->first();
+        
+        if ($lastJobCard) {
+            
+            $lastNumber = (int) substr($lastJobCard->no_jobcard, -3); 
+            $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT); 
+        } else {
+            $newNumber = '001';
+        }
+        
+        $newJobCard = $datePrefix . '-' . $newNumber; 
+        
         $material = Material::all();
 
-        return view('pages.admin.job_card.index',compact('jobCards','orders','material'));
+        return view('pages.admin.job_card.index',compact('jobCards','orders','material','newJobCard',));
 
     }
 
@@ -100,6 +113,7 @@ class JobCardController extends Controller
     // Update a job card
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         // Validation
         $validator = Validator::make($request->all(), [
             'no_jobcard' => 'required|string|max:255',
@@ -155,6 +169,33 @@ class JobCardController extends Controller
         $jobCard->delete();
 
         return redirect()->route('admin.jobcard')->with('success', 'Job Card deleted successfully!');
+    }
+
+    public function print($id){
+
+        $data = JobCardM::find($id);
+        $detail = JobCardDetailM::where('jobcard_id',$data->id)->get();
+        return view('pages.admin.job_card.print',compact('data','detail'));
+    }
+
+    public function material($id){
+        echo "Hapusnya belom bener";
+        $data = JobCardM::find($id);
+        $detail = JobCardDetailM::where('jobcard_id',$data->id)->get();
+
+        return view('pages.admin.job_card.material',compact('data','detail'));
+    }
+
+    public function material_delete($id){
+        $data = JobCardDetailM::find($id);
+        $jobcard = JobCardM::find($data->jobcard_id);
+        $jobcard->totalbop = $jobcard->totalbop -$data->total_bop;
+        $jobcard->totalbp = $jobcard->totalbp - $data->total_bp;
+        $jobcard->totalsp = $jobcard->totalsp - $data->total_sp;
+        $jobcard->save();
+        $data->delete();
+
+        return redirect()->back()->with('success','Item Telah berhasil dihapus');
     }
 }
 

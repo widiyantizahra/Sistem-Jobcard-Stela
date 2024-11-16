@@ -78,6 +78,10 @@ Job Card
                         $total = \App\Models\JobcardDetailM::where('jobcard_id', $jobCard->id)->count();
                       @endphp
                       {{$total}}
+                        &nbsp;&nbsp;  
+                      <a href="{{route('admin.jobcard.material',$jobCard->id)}}">
+                        <i class="material-icons text-success">visibility</i>
+                      </a>
                       </td>
                       {{-- <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $jobCard->totalbp }}</td> --}}
                       <td>&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -86,9 +90,89 @@ Job Card
                             <i class="material-icons text-success">add</i>
                         </a>
 
-                          <a href="{{ route('admin.jobcard.edit', $jobCard->id) }}" class="mx-2">
-                              <i class="material-icons text-warning">edit</i>
+                          <!-- Edit Button -->
+                          <a href="#" class="mx-2" data-bs-toggle="modal" data-bs-target="#editJobCardModal{{ $jobCard->id }}">
+                            <i class="material-icons text-warning">edit</i>
                           </a>
+
+                          <!-- Edit Modal -->
+                          <div class="modal fade" id="editJobCardModal{{ $jobCard->id }}" tabindex="-1" aria-labelledby="editJobCardModalLabel{{ $jobCard->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="editJobCardModalLabel{{ $jobCard->id }}">Edit Job Card</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="POST" action="{{ route('admin.jobcard.update', $jobCard->id) }}">
+                                  @csrf
+                                  @method('PUT')
+                                  <div class="modal-body">
+                                    <!-- Input Fields Here -->
+                                    <div class="mb-3">
+                                      <label for="no_jobcard{{ $jobCard->id }}" class="form-label">No Job Card</label>
+                                      <input type="text" class="form-control" id="no_jobcard{{ $jobCard->id }}" name="no_jobcard" value="{{ $jobCard->no_jobcard }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date" class="form-label">Date</label>
+                                        <input type="date" class="form-control" id="date" name="date" value="{{ $jobCard->date }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="customer_name" class="form-label">Customer Name</label>
+                                        <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{ $jobCard->customer_name }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="no_po" class="form-label">No PO</label>
+                                        <input type="text" class="form-control" id="no_po" name="no_po" value="{{ $jobCard->no_po }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="po_date" class="form-label">PO Date</label>
+                                        <input type="date" class="form-control" id="po_date" name="po_date" value="{{ $jobCard->po_date }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="po_received" class="form-label">PO Received</label>
+                                        <input type="date" class="form-control" id="po_received" name="po_received" value="{{ $jobCard->po_received }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kurs" class="form-label">Kurs</label>
+                                        <input type="number" class="form-control" id="kurs" name="kurs" value="{{ $jobCard->kurs }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="totalbop" class="form-label">Total BOP</label>
+                                        <input type="number" class="form-control" id="totalbop" name="totalbop" value="{{ $jobCard->totalbop }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="totalsp" class="form-label">Total SP</label>
+                                        <input type="number" class="form-control" id="totalsp" name="totalsp" value="{{ $jobCard->totalsp }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="totalbp" class="form-label">Total BP</label>
+                                        <input type="number" class="form-control" id="totalbp" name="totalbp" value="{{ $jobCard->totalbp }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="no_form" class="form-label">No Form</label>
+                                        <input type="text" class="form-control" id="no_form" name="no_form" value="{{ $jobCard->no_form }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="effective_date" class="form-label">Effective Date</label>
+                                        <input type="date" class="form-control" id="effective_date" name="effective_date" value="{{ $jobCard->effective_date }}">
+                                    </div>
+                                    <div class="mb-3">
+                                      @php
+                                        $no_revisi_new = $jobCard->no_revisi + 1 ;
+                                      @endphp
+                                        <label for="no_revisi" class="form-label">No Revisi</label>
+                                        <input type="number" class="form-control" id="no_revisi" name="no_revisi" value="{{$no_revisi_new}}">
+                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                          </div>
+
                           <!-- View Icon Trigger for Modal -->
                           <a href="#" class="mx-2" data-bs-toggle="modal" data-bs-target="#viewModal{{ $jobCard->id }}">
                             <i class="material-icons text-success">visibility</i>
@@ -104,7 +188,7 @@ Job Card
                                         $job = \App\Models\JobCardM::find($jobCard->id);
                                       @endphp
                                         <h5 class="modal-title" id="viewModalLabel{{ $jobCard->id }}" style="color: white">Job Card Details - {{ $job->no_jobcard }}</h5> &nbsp;&nbsp;&nbsp;&nbsp;
-                                        <a href="" class="mt-2 btn btn-white"><i class="ml-3 material-icons text-black">print</i></a>
+                                        <a href="{{route('admin.jobcard.print',$jobCard->id)}}" class="mt-2 btn btn-white"><i class="ml-3 material-icons text-black">print</i></a>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     
@@ -133,15 +217,22 @@ Job Card
                                                 <div class="table-responsive">
                                                   <table class="table table-striped">
                                                       <thead>
-                                                          <tr>
-                                                              <th rowspan="2">NO</th>
-                                                              <th rowspan="2">Qty</th>
-                                                              <th rowspan="2">Description</th>
-                                                              <th colspan="2">Bottom Price</th>
-                                                              <th colspan="2">Selling Price</th>
-                                                              <th colspan="3">Buying Price</th>
-                                                              <th rowspan="2">Remarks <br> Delivery Time</th>
-                                                          </tr>
+                                                        <style>
+                                                          th.text-align-center {
+                                                              text-align: center;
+                                                              vertical-align: middle; /* Centers vertically */
+                                                          }
+                                                      </style>
+                                                        <tr>
+                                                          <th class="text-align-center" rowspan="2">NO</th>
+                                                          <th class="text-align-center" rowspan="2">Qty</th>
+                                                          <th class="text-align-center" rowspan="2">Description</th>
+                                                          <th class="text-align-center" colspan="2">Bottom Price</th>
+                                                          <th class="text-align-center" colspan="2">Selling Price</th>
+                                                          <th class="text-align-center" colspan="3">Buying Price</th>
+                                                          <th class="text-align-center" rowspan="2">Remarks <br> Delivery Time</th>
+                                                      </tr>
+                                                      
                                                           <tr>
                                                               <th>Unit Price</th>
                                                               <th>Total</th>
@@ -304,11 +395,11 @@ Job Card
         <div class="modal-body">
           <div class="form-group">
             <label for="no_jobcard">Job Card Number</label>
-            <input type="text" class="form-control" id="no_jobcard" style="outline: 1px solid #007bff;" name="no_jobcard" required>
+            <input type="text" class="form-control" id="no_jobcard" style="outline: 1px solid #007bff;" value="{{$newJobCard}}" name="no_jobcard" required>
           </div>
           <div class="form-group">
             <label for="date">Date</label>
-            <input type="date" class="form-control" id="date" style="outline: 1px solid #007bff;" name="date" required>
+            <input type="date" class="form-control" id="date" style="outline: 1px solid #007bff;" value="{{now()->format('Y-m-d')}}" name="date" required>
           </div>
           <div class="form-group">
             <label for="kurs">Kurs</label>
@@ -342,7 +433,7 @@ Job Card
           </div>
           <div class="form-group">
             <label for="no_revisi">Revision Number</label>
-            <input type="number" class="form-control" id="no_revisi" style="outline: 1px solid #007bff;" name="no_revisi" required>
+            <input type="number" class="form-control" id="no_revisi" style="outline: 1px solid #007bff;" name="no_revisi" value="1" readonly>
           </div>
         </div>
         <div class="modal-footer">
