@@ -16,11 +16,73 @@
             <input type="text" class="form-control">
           </div> --}}
           
-      </div>
-      @php
+        </div>
+        @php
         $user_id = Auth::user()->id;
         $role = Auth::user()->role;
-      @endphp
+        $notif = \App\Models\NotifM::where('status', 0)
+                                    ->orderBy('important', 'asc')
+                                    ->get();
+
+        @endphp
+        @if (Auth::user()->role == 0)
+          @else
+          <div class="dropdown">
+            <button 
+              class="btn btn-secondary dropdown-toggle" 
+              type="button" 
+              id="notificationDropdown" 
+              data-bs-toggle="dropdown" 
+              aria-expanded="false">
+              <i class="fa fa-bell"></i>
+            </button>
+            <ul class="dropdown-menu p-3" style="width: 600px;" aria-labelledby="notificationDropdown">
+              @foreach ($notif as $n)
+                @php
+                  $oleh = \App\Models\User::where('id', $n->user_id)->value('name');
+                @endphp
+                <li class="dropdown-item">
+                  <div class="row">
+                    <div class="col-1">
+                      <strong>{{$loop->iteration}}</strong>
+                    </div>
+                    <div class="col-3 text-wrap text-break">
+                      <strong>Name</strong>
+                      <hr class="my-1">
+                      {{ $n->judul }}
+                    </div>
+                    <style>
+                      .text-wrap {
+                        word-wrap: break-word; /* Memastikan teks membungkus jika terlalu panjang */
+                        white-space: normal;  /* Memastikan teks tidak tetap dalam satu baris */
+                        overflow-wrap: break-word; /* Dukungan modern untuk pembungkusan */
+                      }
+                    </style>
+                                      
+                    <div class="col-3 text-wrap text-break">
+                      <strong>Jobcard</strong>
+                      <hr class="my-1">
+                      {{ $n->no_jobcard }}
+                    </div>
+                    <div class="col-2 text-wrap text-break">
+                      <strong>Jumlah</strong>
+                      <hr class="my-1">
+                      {{ $n->jumlah_pengadaan }}
+                    </div>
+                    <div class="col-3 text-wrap text-break">
+                      <strong>By</strong>
+                      <hr class="my-1">
+                      {{ $oleh }}
+                    </div>
+                  </div>
+                </li>
+                {{-- <hr style="width: 5px"> --}}
+              @endforeach
+            </ul>
+          </div>
+        @endif
+        
+        
       <ul class="navbar-nav ms-auto align-items-center">
         <!-- Profile Image -->
         <li class="nav-item d-flex align-items-center">

@@ -45,7 +45,7 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::get('/material/{id}', [JobCardController::class, 'material'])->name('jobcard.material');
             Route::delete('/material/delete/{id}', [JobCardController::class, 'material_delete'])->name('jobcard.material.delete');
             Route::prefix('pengadaan')->group(function () {
-                Route::get('/add/{id}', [JobcardDetailController::class, 'addPengadaan'])->name('jobcard.pengadaan');
+                Route::get('/add/{id}/{qty}/{prd}', [JobcardDetailController::class, 'addPengadaan'])->name('jobcard.pengadaan');
 
             });
             

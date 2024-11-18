@@ -37,16 +37,17 @@
                             <th class="text-align-center">Unit Price</th>
                             <th class="text-align-center">Total</th>
                             <th class="text-align-center">Supplier</th>
-                        </tr>
+                                    </tr>
                     </thead>
                     <tbody>
                         @foreach ($detail as $d)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }} 
+                                <!-- Trigger Link -->
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" data-bs-id="{{ $d->id }}">
                                     <i class="material-icons text-danger">delete</i>
                                 </a>
-                                    
+
                                 <!-- Modal -->
                                 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -60,7 +61,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                <form id="deleteForm" method="POST" action="" style="display: inline;">
+                                                <form id="deleteForm" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -69,17 +70,17 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <script>
-                                    // Handle setting the form action dynamically
-                                    const deleteLinks = document.querySelectorAll('[data-bs-toggle="modal"]');
-                                    deleteLinks.forEach(link => {
-                                        link.addEventListener('click', function () {
-                                            const id = this.getAttribute('data-bs-id');
-                                            const form = document.getElementById('deleteForm');
-                                            form.action = '{{ route('admin.jobcard.material.delete', '') }}/' + id;
-                                        });
+                                    // Set the form action dynamically using Bootstrap's modal events
+                                    document.getElementById('deleteModal').addEventListener('show.bs.modal', function (event) {
+                                        const button = event.relatedTarget; // Button that triggered the modal
+                                        const id = button.getAttribute('data-bs-id'); // Extract info from data-bs-* attribute
+                                        const form = document.getElementById('deleteForm');
+                                        form.action = `{{ route('admin.jobcard.material.delete', '') }}/${id}`;
                                     });
                                 </script>
+
                                 
                                 </td>
                                 <td class="text-center">{{ $d->qty }} 

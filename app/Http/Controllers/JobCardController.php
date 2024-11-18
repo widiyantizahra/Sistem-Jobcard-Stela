@@ -179,7 +179,6 @@ class JobCardController extends Controller
     }
 
     public function material($id){
-        echo "Hapusnya belom bener";
         $data = JobCardM::find($id);
         $detail = JobCardDetailM::where('jobcard_id',$data->id)->get();
 

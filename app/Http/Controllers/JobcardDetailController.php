@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\JobCardDetailM;
 use App\Models\JobCardM;
 use App\Models\Material;
+use App\Models\NotifM;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobcardDetailController extends Controller
 {
@@ -60,8 +62,17 @@ class JobcardDetailController extends Controller
         return redirect()->route('admin.jobcard')->with('success', 'Job card detail added successfully!');
     }
     
-    public function addPengadaan($id){
-        // dd($id);
+    public function addPengadaan($id,$qty,$prd){
+        $data = JobCardM::find($id);
+        // dd($data);  
+        $material = Material::find($prd);
+        $notif = new NotifM();
+        $notif->judul = 'Pengadaan '.$material->name;
+        $notif->no_jobcard = $data->no_jobcard;
+        $notif->jumlah_pengadaan = $qty;
+        $notif->user_id = Auth::user()->id;
+        $notif->important = 1;
+        $notif->save();
         return redirect()->back()->with('success','Pengadaan telah Diajukan');
     }
 }

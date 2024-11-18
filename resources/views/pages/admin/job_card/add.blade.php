@@ -92,7 +92,7 @@
                 <label for="remarks">Remarks</label>
                 <input type="text" class="form-control" id="remarks" name="remarks" style="outline: 1px solid #007bff;">
             </div>
-
+            <input type="hidden" id="ids" value="{{$id}}">
             <div class="mt-3">
                 <a href="{{ route('admin.jobcard') }}" class="btn btn-secondary">Back</a>
                 <button type="submit" class="btn btn-primary">Save Material</button>
@@ -103,6 +103,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const ids = document.getElementById('ids');
         const descriptionSelect = document.getElementById('description');
         const materialId = document.getElementById('id');
         const qtyInput = document.getElementById('qty');
@@ -154,7 +155,7 @@
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "{{ route('admin.jobcard.pengadaan', '') }}/" + materialId.value;
+                        window.location.href = "{{ route('admin.jobcard.pengadaan', ['','','']) }}/" + ids.value + "/" + qtyInput.value + "/" + materialId.value;
                     } else {
                         qtyInput.value = maxQty;
                     }
