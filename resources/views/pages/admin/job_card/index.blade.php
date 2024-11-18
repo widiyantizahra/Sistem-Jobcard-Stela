@@ -277,11 +277,11 @@ Job Card
                                                             <tr>
                                                               <td colspan="3" class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;Total In USD</td>
                                                               <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;$</td>
-                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalbop}}</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ number_format($job->totalbop / $job->kurs, 2, '.', ',') }}</td>
                                                               <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;$</td>
-                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalsp}}</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ number_format($job->totalsp/ $job->kurs, 2, '.', ',') }}</td>
                                                               <td class="text-end">&nbsp;&nbsp;&nbsp;&nbsp;$</td>
-                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{$job->totalbp}}</td>
+                                                              <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ number_format($job->totalbp / $job->kurs, 2, '.', ',') }}</td>
                                                             </tr>
                                                             
                                                           <!-- Additional rows as needed -->
@@ -352,31 +352,63 @@ Job Card
 
         <div class="col-lg-4 col-md-6">
           <div class="card h-100">
-            <div class="card-header pb-0">
-              <h6>Orders Overview</h6>
-              <p class="text-sm">
-                <i class="fa fa-arrow-up text-success"></i>
-                <span class="font-weight-bold">24%</span> this month
-              </p>
-            </div>
-            <div class="card-body p-3">
-              <div class="timeline timeline-one-side">
-                <!-- Orders timeline -->
-                @foreach($orders as $order)
-                <div class="timeline-block mb-3">
-                  <span class="timeline-step">
-                    <i class="material-icons text-{{ $order->icon_color }}">{{ $order->icon }}</i>
-                  </span>
-                  <div class="timeline-content">
-                    <h6 class="text-dark text-sm font-weight-bold">{{ $order->title }}</h6>
-                    <p class="text-secondary font-weight-bold text-xs">{{ $order->date }}</p>
-                  </div>
-                </div>
-                @endforeach
+              <div class="card-header pb-0">
+                  <h6>Orders Overview</h6>
+                  <p class="text-sm">
+                      <i class="fa fa-arrow-up text-success"></i>
+                      <span class="font-weight-bold">24%</span> this month
+                  </p>
               </div>
-            </div>
+              <div class="card-body p-3">
+                  <!-- Canvas element for the chart -->
+                  <canvas id="ordersChart"></canvas>
+              </div>
           </div>
-        </div>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <script>
+          // Get the canvas element
+          var ctx = document.getElementById('ordersChart').getContext('2d');
+
+          // Initialize the chart
+          var ordersChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: @json($chartLabels), // Monthly labels (e.g., January, February, etc.)
+                  datasets: [{
+                      label: 'Orders Total (SP)', // Chart label
+                      data: @json($chartData),   // Data for each month
+                      borderColor: 'rgba(75, 192, 192, 1)', // Line color
+                      backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill color
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  responsive: true, // Make the chart responsive
+                  scales: {
+                      y: {
+                          beginAtZero: true, // Start the Y axis at 0
+                          ticks: {
+                              callback: function(value) {
+                                  return value; // Display value on Y-axis
+                              }
+                          }
+                      }
+                  },
+                  plugins: {
+                      legend: {
+                          display: true, // Display the legend
+                          position: 'top', // Position of the legend
+                      },
+                      tooltip: {
+                          mode: 'index',
+                          intersect: false
+                      }
+                  }
+              }
+          });
+      </script>
       </div>
 </div>
 

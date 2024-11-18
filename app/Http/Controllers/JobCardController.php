@@ -11,38 +11,63 @@ use Illuminate\Support\Facades\Validator;
 
 class JobCardController extends Controller
 {
-    // Display the list of job cards
     public function index(Request $request)
-    {
-        $search = $request->input('search');
+{
+    $search = $request->input('search');
 
-        // Fetch job cards, filtered by search if provided
-        $jobCards = JobCardM::when($search, function($query, $search) {
-            return $query->where('no_jobcard', 'like', "%{$search}%")
-                         ->orWhere('customer_name', 'like', "%{$search}%");
-        })->paginate(10); // Modify pagination as needed
+    // Fetch job cards, filtered by search if provided
+    $jobCards = JobCardM::when($search, function($query, $search) {
+        return $query->where('no_jobcard', 'like', "%{$search}%")
+                     ->orWhere('customer_name', 'like', "%{$search}%");
+    })->paginate(10); // Modify pagination as needed
 
-        $orders = []; 
-        $datePrefix = 'JC.' . now()->format('dmY'); 
-        $lastJobCard = JobCardM::where('no_jobcard', 'like', "$datePrefix%")
-            ->orderBy('no_jobcard', 'desc')
-            ->first();
-        
-        if ($lastJobCard) {
-            
-            $lastNumber = (int) substr($lastJobCard->no_jobcard, -3); 
-            $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT); 
-        } else {
-            $newNumber = '001';
-        }
-        
-        $newJobCard = $datePrefix . '-' . $newNumber; 
-        
-        $material = Material::all();
+    $orders = []; 
+    $datePrefix = 'JC.' . now()->format('dmY'); 
+    $lastJobCard = JobCardM::where('no_jobcard', 'like', "$datePrefix%")
+        ->orderBy('no_jobcard', 'desc')
+        ->first();
+    
+    // Ambil tahun saat ini
+    $currentYear = date('Y');
 
-        return view('pages.admin.job_card.index',compact('jobCards','orders','material','newJobCard',));
+    // Cari job card terakhir yang dibuat di tahun ini
+    $lastJobCard = JobCardM::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
 
+    if ($lastJobCard) {
+        // Ambil 3 digit terakhir dari nomor jobcard terakhir
+        $lastNumber = (int) substr($lastJobCard->no_jobcard, -3);
+        $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+    } else {
+        // Jika belum ada, mulai dari 001
+        $newNumber = '001';
     }
+
+    // Format nomor jobcard
+    $noJobCard = 'JC.' . date('dmY') . '-' . $newNumber;
+
+    $newJobCard = $noJobCard; 
+    
+    $material = Material::all();
+
+    // Chart data preparation
+    $monthlyTotals = JobCardM::whereYear('created_at', $currentYear)
+        ->selectRaw('MONTH(created_at) as month, SUM(totalsp) as totalsp')
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+    // Prepare chart data
+    $chartLabels = [];
+    $chartData = [];
+
+    foreach ($monthlyTotals as $total) {
+        $chartLabels[] = \Carbon\Carbon::create()->month($total->month)->format('F'); // Get month name
+        $chartData[] = $total->totalsp;
+    }
+
+    return view('pages.admin.job_card.index', compact('jobCards', 'orders', 'material', 'newJobCard', 'chartLabels', 'chartData'));
+}
+
 
     // Show the form for creating a new job card
     public function create()

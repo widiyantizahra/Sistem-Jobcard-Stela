@@ -108,11 +108,11 @@
                         <tr>
                             <td colspan="3" class="text-end"><strong>Total In USD</strong></td>
                             <td class="text-end">$</td>
-                            <td>{{ number_format($data->totalbop / 15000, 2, '.', ',') }}</td>
+                            <td>{{ number_format($data->totalbop / $data->kurs, 2, '.', ',') }}</td>
                             <td class="text-end">$</td>
-                            <td>{{ number_format($data->totalsp / 15000, 2, '.', ',') }}</td>
+                            <td>{{ number_format($data->totalsp / $data->kurs, 2, '.', ',') }}</td>
                             <td class="text-end">$</td>
-                            <td>{{ number_format($data->totalbp / 15000, 2, '.', ',') }}</td>
+                            <td>{{ number_format($data->totalbp / $data->kurs, 2, '.', ',') }}</td>
                         </tr>
                     </tbody>
                 </table>
