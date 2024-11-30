@@ -42,7 +42,9 @@
   @include('layout.admin.sidebar')
 @elseif (Auth::user()->role == 1)
   @include('layout.pegawai.sidebar')
-  
+@elseif (Auth::user()->role == 2)
+  @include('layout.direktur.sidebar')
+
 @endif
   
 </aside>

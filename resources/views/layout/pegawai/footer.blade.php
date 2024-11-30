@@ -6,7 +6,7 @@
             document.write(new Date().getFullYear())
           </script>,
           made with <i class="fa fa-heart"></i> by
-          <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Stela Noerosa</a>
+          <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Stela Noer Rosa</a>
           Politeknik Negeri Subang
         </div>
       </div>

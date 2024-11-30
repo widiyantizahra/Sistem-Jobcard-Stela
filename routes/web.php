@@ -65,5 +65,12 @@ Route::middleware([AutoLogout::class])->group(function () {
             Route::delete('/destroy/{id}',[KelolaMaterialController::class,'destroy'])->name('kmaterial.destroy');
         });
     });
+
+    Route::group(['prefix' => 'direktur', 'middleware' => ['direktur'], 'as' => 'direktur.'], function () {
+        Route::get('/', [DashboardController::class, 'direktur'])->name('dashboard'); 
+        Route::prefix('laporan')->group(function () {
+
+        });
+    });
     
 });

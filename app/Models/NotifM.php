@@ -15,6 +15,6 @@ class NotifM extends Model
         'no_jobcard',
         'jumlah_pengadaan',
         'user_id',
-        'important',
+        'material_id',
     ];
 }

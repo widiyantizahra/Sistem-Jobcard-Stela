@@ -71,7 +71,7 @@ class JobcardDetailController extends Controller
         $notif->no_jobcard = $data->no_jobcard;
         $notif->jumlah_pengadaan = $qty;
         $notif->user_id = Auth::user()->id;
-        $notif->important = 1;
+        $notif->material_id = $material->id;
         $notif->save();
         return redirect()->back()->with('success','Pengadaan telah Diajukan');
     }

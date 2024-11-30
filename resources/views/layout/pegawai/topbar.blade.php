@@ -20,10 +20,20 @@
         @php
         $user_id = Auth::user()->id;
         $role = Auth::user()->role;
-        $notif = \App\Models\NotifM::where('status', 0)
-                                    ->orderBy('important', 'asc')
-                                    ->get();
+        use Illuminate\Support\Facades\DB;
 
+        $notif = \App\Models\NotifM::select('notif.*', 'material.unit_price')
+            ->join('material', 'notif.material_id', '=', 'material.id')
+            ->get()
+            ->map(function ($item) {
+                $unitPriceWeight = 0.75;
+                $jumlahPengadaanWeight = 0.25;
+                
+                $item->ahp_score = ($item->unit_price * $unitPriceWeight) + ($item->jumlah_pengadaan * $jumlahPengadaanWeight);
+                return $item;
+            })
+            ->sortByDesc('ahp_score'); // Mengurutkan berdasarkan skor AHP
+            // dd($notif);
         @endphp
         @if (Auth::user()->role == 0)
           @else
@@ -33,51 +43,39 @@
               type="button" 
               id="notificationDropdown" 
               data-bs-toggle="dropdown" 
-              aria-expanded="false">
-              <i class="fa fa-bell"></i>
+              aria-expanded="false">Notifikasi
             </button>
             <ul class="dropdown-menu p-3" style="width: 600px;" aria-labelledby="notificationDropdown">
               @foreach ($notif as $n)
-                @php
-                  $oleh = \App\Models\User::where('id', $n->user_id)->value('name');
-                @endphp
-                <li class="dropdown-item">
-                  <div class="row">
-                    <div class="col-1">
-                      <strong>{{$loop->iteration}}</strong>
-                    </div>
-                    <div class="col-3 text-wrap text-break">
-                      <strong>Name</strong>
-                      <hr class="my-1">
-                      {{ $n->judul }}
-                    </div>
-                    <style>
-                      .text-wrap {
-                        word-wrap: break-word; /* Memastikan teks membungkus jika terlalu panjang */
-                        white-space: normal;  /* Memastikan teks tidak tetap dalam satu baris */
-                        overflow-wrap: break-word; /* Dukungan modern untuk pembungkusan */
-                      }
-                    </style>
-                                      
-                    <div class="col-3 text-wrap text-break">
-                      <strong>Jobcard</strong>
-                      <hr class="my-1">
-                      {{ $n->no_jobcard }}
-                    </div>
-                    <div class="col-2 text-wrap text-break">
-                      <strong>Jumlah</strong>
-                      <hr class="my-1">
-                      {{ $n->jumlah_pengadaan }}
-                    </div>
-                    <div class="col-3 text-wrap text-break">
-                      <strong>By</strong>
-                      <hr class="my-1">
-                      {{ $oleh }}
-                    </div>
-                  </div>
-                </li>
-                {{-- <hr style="width: 5px"> --}}
+                  <li class="dropdown-item">
+                      <div class="row">
+                          <div class="col-1">
+                              <strong>{{$loop->iteration}}</strong>
+                          </div>
+                          <div class="col-3 text-wrap text-break">
+                              <strong>Name</strong>
+                              <hr class="my-1">
+                              {{ $n->judul }}
+                          </div>
+                          <div class="col-3 text-wrap text-break">
+                              <strong>Jobcard</strong>
+                              <hr class="my-1">
+                              {{ $n->no_jobcard }}
+                          </div>
+                          <div class="col-2 text-wrap text-break">
+                              <strong>Jumlah</strong>
+                              <hr class="my-1">
+                              {{ $n->jumlah_pengadaan }}
+                          </div>
+                          <div class="col-3 text-wrap text-break">
+                              <strong>By</strong>
+                              <hr class="my-1">
+                              {{ \App\Models\User::find($n->user_id)->name }}
+                          </div>
+                      </div>
+                  </li>
               @endforeach
+
             </ul>
           </div>
         @endif

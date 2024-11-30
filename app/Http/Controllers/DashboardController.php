@@ -40,5 +40,9 @@ class DashboardController extends Controller
         ));
     }
 
+    public function direktur(){
+        return view('pages.direktur.index');
+    }
+
 
 }
