@@ -10,7 +10,12 @@ class DashboardController extends Controller
 {
     public function pegawai()
     {
-        return view('pages.pegawai.index');
+        // Total number of jobcards
+        $totalJobcards = JobCardM::count();
+
+        // Total revisions (sum of `no_revisi` column)
+        $totalRevisions = Material::count();
+        return view('pages.pegawai.index',compact('totalJobcards','totalRevisions'));
     }
     public function admin()
     {
@@ -18,13 +23,13 @@ class DashboardController extends Controller
         $totalJobcards = JobCardM::count();
 
         // Total revisions (sum of `no_revisi` column)
-        $totalRevisions = JobCardM::sum('no_revisi');
+        $totalRevisions = Material::count();
 
         // Monthly Jobcard Data for Chart
         $monthlyJobcards = JobCardM::selectRaw('MONTH(date) as month, COUNT(*) as count')
             ->groupBy('month')
             ->orderBy('month')
-            ->get();
+            ->get();     
 
         // Prepare data for Chart.js
         $monthlyJobcardLabels = $monthlyJobcards->pluck('month')->map(function ($month) {

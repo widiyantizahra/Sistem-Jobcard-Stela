@@ -22,7 +22,7 @@
         $role = Auth::user()->role;
         use Illuminate\Support\Facades\DB;
 
-        $notif = \App\Models\NotifM::select('notif.*', 'material.unit_price')
+        $notif = \App\Models\NotifM::where('status',0)->select('notif.*', 'material.unit_price')
             ->join('material', 'notif.material_id', '=', 'material.id')
             ->get()
             ->map(function ($item) {
@@ -39,11 +39,13 @@
           @else
           <div class="dropdown">
             <button 
-              class="btn btn-secondary dropdown-toggle" 
+              class="btn btn-secondary " 
               type="button" 
               id="notificationDropdown" 
               data-bs-toggle="dropdown" 
               aria-expanded="false">Notifikasi
+              <i class="mdi mdi-bell-alert"></i>
+              <img src="{{asset('bell-alert.svg')}}" width="5%" alt="">
             </button>
             <ul class="dropdown-menu p-3" style="width: 600px;" aria-labelledby="notificationDropdown">
               @foreach ($notif as $n)

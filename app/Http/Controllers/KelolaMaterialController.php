@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Material;
+use App\Models\NotifM;
 use Illuminate\Http\Request;
 
 class KelolaMaterialController extends Controller
@@ -34,6 +35,13 @@ class KelolaMaterialController extends Controller
             'buying_price' => $request->buying_price,
             'supplier' => $request->supplier,
         ]);
+
+        $same = NotifM::where('material_id',$material->id)->value('id');
+        $notif = NotifM::find($same);
+        if($notif){
+            $notif->status=1;
+            $notif->save();
+        } 
 
         // Redirect with a success message
         return redirect()->route('pegawai.kmaterial')->with('success', 'Material updated successfully.');
